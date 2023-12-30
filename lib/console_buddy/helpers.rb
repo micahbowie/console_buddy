@@ -6,7 +6,7 @@
 #   console_method :call_api do |status, message|
 #     puts "making api call"
 
-#     puts "RESPONSE: { #{status}, #{message}}"
+#     puts "RESPONSE: { #{status}, #{message} }"
 #   end
 # end
 

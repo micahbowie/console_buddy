@@ -33,7 +33,7 @@ module ConsoleBuddy
 
         augment_irb
         augment_rails
-        return "ConsoleBuddy session started!"
+        puts "ConsoleBuddy session started!"
       rescue ::StandardError => error
         puts "ConsoleBuddy encountered an error: #{error.message} during startup."
       end
@@ -50,6 +50,10 @@ module ConsoleBuddy
     def augment_rails
       if defined? Rails
         require_relative "console_buddy/railtie"
+      end
+
+      if defined? Rails::ConsoleMethods
+        Rails::ConsoleMethods.include(ConsoleBuddy::IRB)
       end
     end
   end
