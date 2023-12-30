@@ -29,7 +29,6 @@ module ConsoleBuddy
       def console_method(method_name, &block)
         ::ConsoleBuddy.store.console_method[method_name] = block
         nil
-        # ::ConsoleBuddy::IRB.define_method(method_name, &block)
       end
     end
   end
