@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'csv'
 
 module ConsoleBuddy
@@ -6,7 +8,7 @@ module ConsoleBuddy
       if dir == 'tmp'
         Dir.mkdir(dir) unless Dir.exist?(dir)
       end
-      file_path = ::File.join(dir, file_name)
+      file_path = ::File.join(dir, "#{file_name}.csv}")
 
       ::CSV.open(file_path, 'w') do |csv|
         csv << headers

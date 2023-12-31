@@ -9,6 +9,8 @@ require_relative "console_buddy/base"
 require_relative "console_buddy/helpers"
 require_relative "console_buddy/irb"
 require_relative "console_buddy/version"
+require_relative "console_buddy/one_off_job"
+require_relative "console_buddy/job"
 
 module ConsoleBuddy
   class << self
@@ -58,12 +60,14 @@ module ConsoleBuddy
     def start_buddy_in_irb
       if defined? IRB::ExtendCommandBundle
         IRB::ExtendCommandBundle.include(ConsoleBuddy::IRB)
+        require 'progress_bar/core_ext/enumerable_with_progress'
       end
     end
 
     def start_buddy_in_rails
       if defined? Rails::ConsoleMethods
         Rails::ConsoleMethods.include(ConsoleBuddy::IRB)
+        require 'progress_bar/core_ext/enumerable_with_progress'
       end
     end
   end
@@ -72,4 +76,3 @@ end
 if defined? Rails
   require_relative "console_buddy/railtie"
 end
-

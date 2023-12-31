@@ -27,7 +27,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'rails'
-  # spec.add_dependency 'httparty'
+  spec.add_dependency 'table_print'
+  spec.add_dependency 'httparty'
+  spec.add_dependency 'progress_bar'
+  spec.add_dependency 'terminal-table'
 
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rspec-rails"
