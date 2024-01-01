@@ -19,7 +19,7 @@ module ConsoleBuddy
         if defined?(@service_type)
           return @service_type
         end
-        :sidekiq
+        :inline
       end
 
       def service_type=(type)
@@ -32,6 +32,8 @@ module ConsoleBuddy
       end
 
       def perform(*args)
+        return unless @block
+
         @block.call(*args)
       end
     end

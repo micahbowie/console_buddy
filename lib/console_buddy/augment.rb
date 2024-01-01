@@ -8,7 +8,7 @@
 # 
 # 
 # ConsoleBuddy::Augment.define do
-#   model_method User, :sps do |args|
+#   method User, :sps do |args|
 #     saved_posts
 #   end
 # end
@@ -25,21 +25,21 @@ module ConsoleBuddy
     end
 
     class DSL
-      def model_method(klass, method_name, &block)
+      def method(klass, method_name, &block)
         ConsoleBuddy.store.augment_helper_methods[klass.to_s] <<  { method_name: method_name, block: block, method_type: :instance }
       end
 
-      def model_alias(klass, method_name, new_method_name)
+      def method_alias(klass, method_name, new_method_name)
         block = ::Proc.new { |*args| send(method_name, *args) }
         ConsoleBuddy.store.augment_helper_methods[klass.to_s] <<  { method_name: new_method_name, block: block, method_type: :instance  }
       end
 
-      def model_class_alias(klass, method_name, new_method_name)
+      def class_method_alias(klass, method_name, new_method_name)
         block = ::Proc.new { |*args| send(method_name, *args) }
         ConsoleBuddy.store.augment_helper_methods[klass.to_s] <<  { method_name: new_method_name, block: block, method_type: :class  }
       end
 
-      def model_class_method(klass, method_name, &block)
+      def class_method(klass, method_name, &block)
         ConsoleBuddy.store.augment_helper_methods[klass.to_s] <<  { method_name: method_name, block: block, method_type: :class }
       end
     end
