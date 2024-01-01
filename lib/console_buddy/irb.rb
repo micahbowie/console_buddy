@@ -7,9 +7,9 @@ require_relative "report"
 
 module ConsoleBuddy
   module IRB
-    include ConsoleBuddy::CSV
-    include ConsoleBuddy::HttpRequest
-    include ConsoleBuddy::Report
+    include ::ConsoleBuddy::CSV
+    include ::ConsoleBuddy::HttpRequest
+    include ::ConsoleBuddy::Report
 
     def buddy
       ::ConsoleBuddy::Base.new

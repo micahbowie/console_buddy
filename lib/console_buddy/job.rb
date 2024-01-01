@@ -9,13 +9,13 @@ module ConsoleBuddy
 
       case job_type
       when :resque
-        require_relative "console_buddy/resque_job"
+        require_relative "jobs/resque"
         ::ConsoleBuddy::Jobs::Resque.perform(*args)
       when :sidekiq
-        require_relative "console_buddy/sidekiq_job"
+        require_relative "jobs/sidekiq"
         ::ConsoleBuddy::Jobs::Sidekiq.new.perform(*args)
       when :active_job
-        require_relative "console_buddy/active_job"
+        require_relative "jobs/active_job"
         ::ConsoleBuddy::Jobs::ActiveJob.perform(*args)
       else
         ::ConsoleBuddy::OneOffJob.perform(*args)
@@ -28,13 +28,13 @@ module ConsoleBuddy
 
         case job_type
         when :resque
-          require_relative "console_buddy/resque_job"
+          require_relative "jobs/resque"
           ::ConsoleBuddy::Jobs::Resque.perform_later(*args)
         when :sidekiq
-          require_relative "console_buddy/sidekiq_job"
+          require_relative "jobs/sidekiq"
           ::ConsoleBuddy::Jobs::Sidekiq.perform_async(*args)
         when :active_job
-          require_relative "console_buddy/active_job"
+          require_relative "jobs/active_job"
           ::ConsoleBuddy::Jobs::ActiveJob.perform_later(*args)
         else
           ::ConsoleBuddy::OneOffJob.perform(*args)
