@@ -79,7 +79,8 @@ end
 case ConsoleBuddy.job_adapter == :sidekiq
 when :sidekiq
   require "sidekiq"
-  require_relative "console_buddy/jobs/sidekiq"
+  require_relative "console_buddy/sidekiq_job"
+  # require_relative "console_buddy/jobs/sidekiq"
 when :resque
   require "resque"
   require_relative "console_buddy/jobs/resque"
