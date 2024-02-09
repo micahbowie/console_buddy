@@ -9,11 +9,14 @@ require_relative "console_buddy/base"
 require_relative "console_buddy/helpers"
 require_relative "console_buddy/irb"
 require_relative "console_buddy/version"
+
 require_relative "console_buddy/one_off_job"
 require_relative "console_buddy/job"
 
 module ConsoleBuddy
   class << self
+    attr_accessor :job_adapter
+
     def store
       @store ||= ::ConsoleBuddy::MethodStore.new
     end
@@ -72,6 +75,20 @@ module ConsoleBuddy
     end
   end
 end
+
+case ConsoleBuddy.job_adapter == :sidekiq
+when :sidekiq
+  require "sidekiq"
+  require_relative "console_buddy/sidekiq_job"
+  # require_relative "console_buddy/jobs/sidekiq"
+when :resque
+  require "resque"
+  require_relative "console_buddy/jobs/resque"
+when :active_job
+  require_relative "console_buddy/jobs/active_job"
+else
+end
+
 
 if defined? Rails
   require_relative "console_buddy/railtie"

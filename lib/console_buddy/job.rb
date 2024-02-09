@@ -12,8 +12,8 @@ module ConsoleBuddy
         require_relative "jobs/resque"
         ::ConsoleBuddy::Jobs::Resque.perform(*args)
       when :sidekiq
-        require_relative "jobs/sidekiq"
-        ::ConsoleBuddy::Jobs::Sidekiq.new.perform(*args)
+        require_relative "sidekiq_job"
+        ::ConsoleBuddy::SidekiqJob.new.perform(*args)
       when :active_job
         require_relative "jobs/active_job"
         ::ConsoleBuddy::Jobs::ActiveJob.perform(*args)
@@ -31,8 +31,8 @@ module ConsoleBuddy
           require_relative "jobs/resque"
           ::ConsoleBuddy::Jobs::Resque.perform_later(*args)
         when :sidekiq
-          require_relative "jobs/sidekiq"
-          ::ConsoleBuddy::Jobs::Sidekiq.perform_async(*args)
+          require_relative "sidekiq_job"
+          ::ConsoleBuddy::SidekiqJob.new.perform_async(*args)
         when :active_job
           require_relative "jobs/active_job"
           ::ConsoleBuddy::Jobs::ActiveJob.perform_later(*args)
