@@ -19,6 +19,8 @@ require_relative "console_buddy/jobs/active_job"
 
 module ConsoleBuddy
   class << self
+    attr_accessor :job_adapter
+
     def store
       @store ||= ::ConsoleBuddy::MethodStore.new
     end
@@ -76,6 +78,10 @@ module ConsoleBuddy
       end
     end
   end
+end
+
+if ConsoleBuddy.job_adapter == :sidekiq
+  require "sidekiq"
 end
 
 if defined? Rails
