@@ -12,10 +12,6 @@ require_relative "console_buddy/version"
 
 require_relative "console_buddy/one_off_job"
 require_relative "console_buddy/job"
-require_relative "console_buddy/jobs/sidekiq"
-require_relative "console_buddy/jobs/resque"
-require_relative "console_buddy/jobs/active_job"
-
 
 module ConsoleBuddy
   class << self
@@ -80,9 +76,18 @@ module ConsoleBuddy
   end
 end
 
-if ConsoleBuddy.job_adapter == :sidekiq
+case ConsoleBuddy.job_adapter == :sidekiq
+when :sidekiq
   require "sidekiq"
+  require_relative "console_buddy/jobs/sidekiq"
+when :resque
+  require "resque"
+  require_relative "console_buddy/jobs/resque"
+when :active_job
+  require_relative "console_buddy/jobs/active_job"
+else
 end
+
 
 if defined? Rails
   require_relative "console_buddy/railtie"
