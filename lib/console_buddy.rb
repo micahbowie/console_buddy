@@ -9,8 +9,14 @@ require_relative "console_buddy/base"
 require_relative "console_buddy/helpers"
 require_relative "console_buddy/irb"
 require_relative "console_buddy/version"
+
+
+
 require_relative "console_buddy/one_off_job"
 require_relative "console_buddy/job"
+require_relative "console_buddy/jobs/sidekiq"
+require_relative "console_buddy/jobs/resque"
+require_relative "console_buddy/jobs/active_job"
 
 module ConsoleBuddy
   class << self
