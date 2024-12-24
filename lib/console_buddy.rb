@@ -15,6 +15,7 @@ require_relative "console_buddy/one_off_job"
 require_relative "console_buddy/job"
 
 # Only load the one-off job classes if the gems are installed
+# 
 begin
   require 'sidekiq'
   require_relative "console_buddy/jobs/sidekiq"
@@ -45,9 +46,15 @@ module ConsoleBuddy
     end
 
     def start!
+      # Initialize the default values
       set_config_defaults
+      # Check if there is a .console_buddy/config file
       load_console_buddy_config
+
+      # Only start the buddy in the allowed environments. e.g. development, test
       return if !allowed_env?
+
+      # Do not start the buddy in test environment if use_in_tests is false
       return if test? && !use_in_tests
 
       begin
@@ -123,8 +130,16 @@ module ConsoleBuddy
       end
     end
 
+    # Augment the classes with the methods defined in the store
     def augment_classes
       ::ConsoleBuddy.store.augment_helper_methods.each do |klass, methods|
+        begin
+          klass.constantize
+        rescue NameError
+          puts "Class #{klass} not found. Skipping..." if verbose_console
+          next
+        end
+
         methods.each do |method|
           case method[:method_type]
           when :instance
@@ -142,12 +157,15 @@ module ConsoleBuddy
       end
     end
 
+    # Augment the console with the methods defined in the store
     def augment_console
       ::ConsoleBuddy.store.console_method.each do |method_name, block|
         ::ConsoleBuddy::IRB.define_method(method_name, block)
       end
     end
 
+    # This will add the buddy methods to the IRB session
+    # So that they can be called without instantiating the `ConsoleBuddy::Base` class
     def start_buddy_in_irb
       if defined? IRB::ExtendCommandBundle
         IRB::ExtendCommandBundle.include(ConsoleBuddy::IRB)
@@ -155,6 +173,8 @@ module ConsoleBuddy
       end
     end
 
+    # This will add the buddy methods to the Rails console
+    # So that they can be called without instantiating the `ConsoleBuddy::Base` class
     def start_buddy_in_rails
       if defined? Rails::ConsoleMethods
         Rails::ConsoleMethods.include(ConsoleBuddy::IRB)
@@ -162,6 +182,8 @@ module ConsoleBuddy
       end
     end
 
+    # This will add the buddy methods to the Byebug console
+    # TODO: Add support for Pry
     def start_buddy_in_byebug
       return if !use_in_debuggers
 
