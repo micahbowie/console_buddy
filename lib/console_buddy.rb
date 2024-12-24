@@ -11,10 +11,9 @@ require_relative "console_buddy/helpers"
 require_relative "console_buddy/irb"
 require_relative "console_buddy/version"
 
-
-
 require_relative "console_buddy/one_off_job"
 require_relative "console_buddy/job"
+
 # Only load the one-off job classes if the gems are installed
 begin
   require 'sidekiq'
@@ -39,7 +38,7 @@ end
 
 module ConsoleBuddy
   class << self
-    attr_accessor :verbose_console, :allowed_envs, :use_in_debuggers, :ignore_startup_errors
+    attr_accessor :verbose_console, :allowed_envs, :use_in_debuggers, :ignore_startup_errors, :use_in_tests
 
     def store
       @store ||= ::ConsoleBuddy::MethodStore.new
@@ -49,6 +48,7 @@ module ConsoleBuddy
       set_config_defaults
       load_console_buddy_config
       return if !allowed_env?
+      return if test? && !use_in_tests
 
       begin
         load_console_buddy_files
@@ -57,30 +57,45 @@ module ConsoleBuddy
         start_buddy_in_irb
         start_buddy_in_rails
         start_buddy_in_byebug
-        puts "ConsoleBuddy session started!" if verbose_console
+        puts "ConsoleBuddy session started! Debugger: #{use_in_debuggers} | Test: #{current_env}" if verbose_console
       rescue ::StandardError => error
         puts "ConsoleBuddy encountered an during startup. [Error]: #{error.message}" if ignore_startup_errors
       end
+    end
+
+    def load_byebug!
+      start_buddy_in_byebug
     end
 
     private
 
     def set_config_defaults
       @verbose_console = true
-      @use_in_debuggers = true
+      @use_in_tests = false
+      @use_in_debuggers = false
       @ignore_startup_errors = false
       @allowed_envs = %w[development test]
     end
 
     # Only start the buddy in the allowed environments
     def allowed_env?
-      return true if ENV['RAILS_ENV'].nil?
-
-      can_start = allowed_envs.include?(ENV['RAILS_ENV'])
-      if verbose_console && can_start
-        puts "ConsoleBuddy is starting in #{ENV['RAILS_ENV']} environment."
+      if current_env.present?
+        can_start = allowed_envs.include?(current_env)
+        if verbose_console && can_start
+          puts "ConsoleBuddy is starting in #{current_env} environment."
+        end
+        return can_start
       end
-      can_start
+
+      true
+    end
+
+    def test?
+      current_env == 'test'
+    end
+
+    def current_env
+      ENV['RAILS_ENV'] == 'test' || ENV['RACK_ENV']
     end
 
     # Loads the .console_buddy/config file if present
@@ -147,14 +162,32 @@ module ConsoleBuddy
     end
 
     def start_buddy_in_byebug
+      return if !use_in_debuggers
+
       if defined?(Byebug)
-        # Minitest::Test.send(:include, Minitest::Byebug)
-        Byebug::Runner.include(ConsoleBuddy::IRB)
+        byebug_path = Pathname.new(File.join(__dir__, 'console_buddy', 'byebug'))
+
+        if byebug_path.exist? && byebug_path.directory?
+          byebug_path.each_child do |file|
+            next unless file.file?
+            require file.to_s
+          end
+        end
+
+        [
+          ConsoleBuddy::Byebug::HelloCommand,
+          ConsoleBuddy::Byebug::BuddyCommand,
+        ].each do |command_class|
+          ::Byebug.const_set(
+            command_class.name.split('::').last,
+            command_class,
+          )
+        end
       end
     end
   end
 end
 
-if defined? Rails
-  require_relative "console_buddy/railtie"
-end
+require_relative "console_buddy/initializers/byebug"
+require_relative "console_buddy/initializers/rails"
+require_relative "console_buddy/initializers/rspec"
