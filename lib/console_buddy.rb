@@ -20,30 +20,36 @@ begin
   require 'sidekiq'
   require_relative "console_buddy/jobs/sidekiq"
 rescue LoadError
-  puts "Sidekiq gem not installed, skipping sidekiq job integration."
+  # puts "Sidekiq gem not installed, skipping sidekiq job integration."
 end
 
 begin
   require 'resque'
   require_relative "console_buddy/jobs/resque"
 rescue LoadError
-  puts "Resque gem not installed, skipping resque job integration."
+  # puts "Resque gem not installed, skipping resque job integration."
 end
 
 begin
   require 'activejob'
   require_relative "console_buddy/jobs/active_job"
 rescue LoadError
-  puts "ActiveJob gem not installed, skipping active job integration."
+  # puts "ActiveJob gem not installed, skipping active job integration."
 end
 
 module ConsoleBuddy
   class << self
+    attr_accessor :verbose_console, :allowed_envs
+
     def store
       @store ||= ::ConsoleBuddy::MethodStore.new
     end
 
     def start!
+      set_config_defaults
+      load_console_buddy_config
+      return if !allowed_env?
+
       begin
         load_console_buddy_files
         augment_classes
@@ -52,12 +58,42 @@ module ConsoleBuddy
         start_buddy_in_rails
         puts "ConsoleBuddy session started!"
       rescue ::StandardError => error
-        puts "ConsoleBuddy encountered an during startup. [Error]: #{error.message}"
+        if verbose_console
+          puts "ConsoleBuddy encountered an during startup. [Error]: #{error.message}"
+        end
       end
     end
 
     private
 
+    def set_config_defaults
+      @verbose_console = true
+      @allowed_envs = %w[development test]
+    end
+
+    # Only start the buddy in the allowed environments
+    def allowed_env?
+      return true if ENV['RAILS_ENV'].nil?
+
+      can_start = allowed_envs.include?(ENV['RAILS_ENV'])
+      if verbose_console && can_start
+        puts "ConsoleBuddy is starting in #{ENV['RAILS_ENV']} environment."
+      end
+      can_start
+    end
+
+    # Loads the .console_buddy/config file if present
+    def load_console_buddy_config
+      config_path = Pathname.new(File.join(Dir.pwd, '.console_buddy', 'config.rb'))
+      if config_path.exist? && config_path.file?
+        require config_path.to_s
+      else
+        puts ".console_buddy/config file not found."
+      end
+    end
+
+    # Loads all the files in the .console_buddy folder
+    # .console_buddy folder should be in the root of the project
     def load_console_buddy_files
       console_buddy_path = Pathname.new(File.join(Dir.pwd, '.console_buddy'))
       if console_buddy_path.exist? && console_buddy_path.directory?
