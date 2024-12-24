@@ -2,6 +2,7 @@
 # 
 # Example:
 # ConsoleBuddy::OneOffJob.define { puts "one offer man...another one"; puts User.last.attributes; }
+# Usage: ConsoleBuddy::OneOffJob.perform
 # 
 # Example 2:
 # 
