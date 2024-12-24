@@ -39,7 +39,7 @@ end
 
 module ConsoleBuddy
   class << self
-    attr_accessor :verbose_console, :allowed_envs
+    attr_accessor :verbose_console, :allowed_envs, :use_in_debuggers, :ignore_startup_errors
 
     def store
       @store ||= ::ConsoleBuddy::MethodStore.new
@@ -56,11 +56,10 @@ module ConsoleBuddy
         augment_console
         start_buddy_in_irb
         start_buddy_in_rails
-        puts "ConsoleBuddy session started!"
+        start_buddy_in_byebug
+        puts "ConsoleBuddy session started!" if verbose_console
       rescue ::StandardError => error
-        if verbose_console
-          puts "ConsoleBuddy encountered an during startup. [Error]: #{error.message}"
-        end
+        puts "ConsoleBuddy encountered an during startup. [Error]: #{error.message}" if ignore_startup_errors
       end
     end
 
@@ -68,6 +67,8 @@ module ConsoleBuddy
 
     def set_config_defaults
       @verbose_console = true
+      @use_in_debuggers = true
+      @ignore_startup_errors = false
       @allowed_envs = %w[development test]
     end
 
@@ -142,6 +143,13 @@ module ConsoleBuddy
       if defined? Rails::ConsoleMethods
         Rails::ConsoleMethods.include(ConsoleBuddy::IRB)
         require 'progress_bar/core_ext/enumerable_with_progress'
+      end
+    end
+
+    def start_buddy_in_byebug
+      if defined?(Byebug)
+        # Minitest::Test.send(:include, Minitest::Byebug)
+        Byebug::Runner.include(ConsoleBuddy::IRB)
       end
     end
   end
