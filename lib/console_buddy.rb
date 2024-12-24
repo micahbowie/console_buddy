@@ -32,7 +32,7 @@ module ConsoleBuddy
         start_buddy_in_rails
         puts "ConsoleBuddy session started!"
       rescue ::StandardError => error
-        puts "ConsoleBuddy encountered an error: #{error.message} during startup."
+        puts "ConsoleBuddy encountered an during startup. [Error]: #{error.message}"
       end
     end
 
