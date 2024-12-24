@@ -38,7 +38,7 @@ end
 
 module ConsoleBuddy
   class << self
-    attr_accessor :verbose_console, :allowed_envs, :use_in_debuggers, :ignore_startup_errors, :use_in_tests
+    attr_accessor :verbose_console, :allowed_envs, :use_in_debuggers, :ignore_startup_errors, :use_in_tests, :one_off_job_service_type
 
     def store
       @store ||= ::ConsoleBuddy::MethodStore.new
@@ -75,6 +75,7 @@ module ConsoleBuddy
       @use_in_debuggers = false
       @ignore_startup_errors = false
       @allowed_envs = %w[development test]
+      @one_off_job_service_type = :inline
     end
 
     # Only start the buddy in the allowed environments

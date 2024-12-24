@@ -17,9 +17,9 @@ module ConsoleBuddy
     SERVICE_TYPES = [:sidekiq, :resque, :active_job, :inline].freeze
     class << self
       def service_type
-        if defined?(@service_type)
-          return @service_type
-        end
+        return @service_type if defined?(@service_type)
+        return ConsoleBuddy.one_off_job_service_type if ConsoleBuddy.one_off_job_service_type.present?
+
         :inline
       end
 
