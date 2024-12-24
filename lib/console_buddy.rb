@@ -15,9 +15,27 @@ require_relative "console_buddy/version"
 
 require_relative "console_buddy/one_off_job"
 require_relative "console_buddy/job"
-require_relative "console_buddy/jobs/sidekiq"
-require_relative "console_buddy/jobs/resque"
-require_relative "console_buddy/jobs/active_job"
+# Only load the one-off job classes if the gems are installed
+begin
+  require 'sidekiq'
+  require_relative "console_buddy/jobs/sidekiq"
+rescue LoadError
+  puts "Sidekiq gem not installed, skipping sidekiq job integration."
+end
+
+begin
+  require 'resque'
+  require_relative "console_buddy/jobs/resque"
+rescue LoadError
+  puts "Resque gem not installed, skipping resque job integration."
+end
+
+begin
+  require 'activejob'
+  require_relative "console_buddy/jobs/active_job"
+rescue LoadError
+  puts "ActiveJob gem not installed, skipping active job integration."
+end
 
 module ConsoleBuddy
   class << self
