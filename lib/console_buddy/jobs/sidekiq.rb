@@ -2,6 +2,9 @@
 
 require_relative "../one_off_job"
 
+# Example Usage: ConsoleBuddy::Jobs::Sidekiq.perform_later("foo", "bar")
+# 
+# This class is used to integrate the ConsoleBuddy::OneOffJob with Sidekiq.
 module ConsoleBuddy
   module Jobs
     class Sidekiq
