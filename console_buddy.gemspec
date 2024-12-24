@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Micah Bowie", "Code Cowboy"]
   spec.email         = ["micahbowie20@gmail.com"]
 
-  spec.summary       = 'Console Buddy allows you to use dozens of helpful console methods, shortcuts, and helpers. You can also define custom helpers for your application that will always be loaded in your Rails console when you need it.'
-  spec.description   = 'Console Buddy allows you to use dozens of helpful console methods, shortcuts, and helpers. You can also define custom helpers for your application that will always be loaded in your Rails console when you need it.'
+  spec.summary       = 'Define custom methods, helper, and aliases for app and use them in your rails console or IRB session.'
+  spec.description   = 'Define custom methods, helper, and aliases for app and use them in your rails console or IRB session.'
 
   spec.files = Dir['lib/**/*'] + Dir['spec/**/*']
 
