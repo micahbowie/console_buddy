@@ -25,22 +25,25 @@ module ConsoleBuddy
     end
 
     class DSL
-      def method(klass, method_name, &block)
-        ConsoleBuddy.store.augment_helper_methods[klass.to_s] <<  { method_name: method_name, block: block, method_type: :instance }
+      class InvalidTypeError < StandardError; end
+
+      def method(klass, method_name, type: :instance, &block)
+        raise InvalidTypeError, "Invalid method type. Must be either :instance or :class" unless %i[instance class].include?(type)
+
+        store(klass) <<  { method_name: method_name, block: block, method_type: type }
       end
 
-      def method_alias(klass, method_name, new_method_name)
+      def method_alias(klass, method_name, new_method_name, type: :instance)
+        raise InvalidTypeError, "Invalid method type. Must be either :instance or :class" unless %i[instance class].include?(type)
+
         block = ::Proc.new { |*args| send(method_name, *args) }
-        ConsoleBuddy.store.augment_helper_methods[klass.to_s] <<  { method_name: new_method_name, block: block, method_type: :instance  }
+        store(klass) <<  { method_name: new_method_name, block: block, method_type: type }
       end
 
-      def class_method_alias(klass, method_name, new_method_name)
-        block = ::Proc.new { |*args| send(method_name, *args) }
-        ConsoleBuddy.store.augment_helper_methods[klass.to_s] <<  { method_name: new_method_name, block: block, method_type: :class  }
-      end
+      private
 
-      def class_method(klass, method_name, &block)
-        ConsoleBuddy.store.augment_helper_methods[klass.to_s] <<  { method_name: method_name, block: block, method_type: :class }
+      def store(klass)
+        ConsoleBuddy.store.augment_helper_methods[klass.to_s]
       end
     end
   end
