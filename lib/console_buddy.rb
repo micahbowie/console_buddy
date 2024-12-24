@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'pathname'
 require 'active_support'
 require 'active_support/all'
 
@@ -26,6 +27,7 @@ module ConsoleBuddy
 
     def start!
       begin
+        load_console_buddy_files
         augment_classes
         augment_console
         start_buddy_in_irb
@@ -37,6 +39,18 @@ module ConsoleBuddy
     end
 
     private
+
+    def load_console_buddy_files
+      console_buddy_path = Pathname.new(File.join(Dir.pwd, '.console_buddy'))
+      if console_buddy_path.exist? && console_buddy_path.directory?
+        console_buddy_path.each_child do |file|
+          next unless file.file?
+          require file.to_s
+        end
+      else
+        puts ".console_buddy folder not found in the root of the project."
+      end
+    end
 
     def augment_classes
       ::ConsoleBuddy.store.augment_helper_methods.each do |klass, methods|
