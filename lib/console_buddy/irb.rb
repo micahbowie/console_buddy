@@ -11,6 +11,10 @@ module ConsoleBuddy
     include ::ConsoleBuddy::HttpRequest
     include ::ConsoleBuddy::Report
 
+    # This method is used to define a method on the `Object` class.
+    # This method will return a new instance of the `ConsoleBuddy::Base` class.
+    # Example Usage:
+    # buddy.table_for(User.all)
     def buddy
       ::ConsoleBuddy::Base.new
     end
