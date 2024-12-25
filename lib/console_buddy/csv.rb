@@ -5,11 +5,9 @@ require 'csv'
 module ConsoleBuddy
   module CSV
     def generate_csv(headers, rows, filename: DateTime.now.to_s, dir: 'tmp')
-      if dir == 'tmp'
-        Dir.mkdir(dir) unless Dir.exist?(dir)
-      end
-      file_path = ::File.join(dir, "#{file_name}.csv")
+      Dir.mkdir(dir) unless Dir.exist?(dir)
 
+      file_path = ::File.join(dir, "#{filename}.csv")
       ::CSV.open(file_path, 'w') do |csv|
         csv << headers
         rows.each do |row|

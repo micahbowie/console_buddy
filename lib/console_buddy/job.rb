@@ -2,6 +2,11 @@
 
 require_relative 'one_off_job'
 
+# This class is used to integrate the ConsoleBuddy::OneOffJob with Resque, Sidekiq, and ActiveJob.
+# You can define your job and then run it using the `perform` method of this class.
+# That will then delegate this performance to the correct "job" class based on the service type.
+# 
+# Example Usage: ConsoleBuddy::Job.perform("foo", "bar")
 module ConsoleBuddy
   class Job
     def perform(*args)

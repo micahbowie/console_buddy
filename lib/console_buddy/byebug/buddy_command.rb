@@ -10,6 +10,7 @@ module ConsoleBuddy
       #
       # Return a regex to match the "buddy" command input.
       #
+      # Example: buddy.ping "http://example.com"
       def self.regexp
         /^\s*buddy(?:\.(\w+))?\s*(.*)$/
       end
