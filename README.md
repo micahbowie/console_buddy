@@ -266,6 +266,18 @@ This feature allows you to dynamically define and execute a process async using 
 > ConsoleBuddy::OneOffJob.perform
 ```
 
+## Configurations and settings
+All of these settings are straight forward and do what you think they would do. So I won't go into to much detail:
+```ruby
+# .console_buddy/config.rb
+
+ConsoleBuddy.verbose_console = true # Should console buddy print out to the console during startup
+ConsoleBuddy.use_in_tests = true # Do you want to load in your shortcuts and helpers when using RSpec?
+ConsoleBuddy.use_in_debuggers = true # When in a debugger like byebug should the console buddy context be loaded in?
+ConsoleBuddy.ignore_startup_errors = false # Should warnings and errors be ignored?
+ConsoleBuddy.allowed_envs = ["development", "test"] # What RACK_ENV/RAILS_ENV do we want to use this in?
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
