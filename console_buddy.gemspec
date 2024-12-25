@@ -34,4 +34,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rspec-rails"
+  spec.add_development_dependency "sidekiq"
+  spec.add_development_dependency "activejob"
+  spec.add_development_dependency "resque"
+  spec.add_development_dependency "webmock"
 end
