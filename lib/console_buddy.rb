@@ -66,7 +66,7 @@ module ConsoleBuddy
         start_buddy_in_byebug
         puts "ConsoleBuddy session started! Debugger: #{use_in_debuggers} | Test: #{current_env}" if verbose_console
       rescue ::StandardError => error
-        puts "ConsoleBuddy encountered an during startup. [Error]: #{error.message}" if ignore_startup_errors
+        puts "ConsoleBuddy encountered an during startup. [Error]: #{error.message}" unless ignore_startup_errors
       end
     end
 
@@ -103,7 +103,7 @@ module ConsoleBuddy
     end
 
     def current_env
-      ENV['RAILS_ENV'] == 'test' || ENV['RACK_ENV']
+      ENV['RAILS_ENV'] || ENV['RACK_ENV']
     end
 
     # Loads the .console_buddy/config file if present
