@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Micah Bowie", "Code Cowboy"]
   spec.email         = ["micahbowie20@gmail.com"]
 
-  spec.summary       = 'Define custom methods, helper, and aliases for app and use them in your rails console or IRB session.'
-  spec.description   = 'Define custom methods, helper, and aliases for app and use them in your rails console or IRB session.'
+  spec.summary       = "Have you ever had debugging tricks, aliases, or shortcuts that don't make sense as application code but, are super helpful in the console? Define custom methods, helper, and aliases for your app and use them in your rails console or IRB session."
+  spec.description   = 'Define custom methods, helper, and aliases for your app and use them in your rails console or IRB session.'
 
   spec.files = Dir['lib/**/*'] + Dir['spec/**/*']
 

@@ -1,6 +1,6 @@
 # Console Buddy
 
-Ever have debugging tricks, aliases, or shortcuts that don't make sense as application code but, are super helpful in the console? Console Buddy allows you to define helpful console methods, shortcuts, and helpers. You can also use our built in suite of console helper methods
+Have you ever had debugging tricks, aliases, or shortcuts that don't make sense as application code but, are super helpful in the console? Console Buddy allows you to define helpful console methods, shortcuts, and helpers. You can also use our built in suite of console helper methods
 
 ## Setup
 
