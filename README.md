@@ -263,7 +263,7 @@ This feature allows you to dynamically define and execute a process async using 
 **Usage**  
 ```ruby
 > ConsoleBuddy::OneOffJob.define { User.all.each { |x| x.do_long_running_thing } }
-> ConsoleBuddy::OneOffJob.perform
+> ConsoleBuddy::Job.perform_async
 ```
 
 ## Configurations and settings
@@ -276,6 +276,7 @@ ConsoleBuddy.use_in_tests = true # Do you want to load in your shortcuts and hel
 ConsoleBuddy.use_in_debuggers = true # When in a debugger like byebug should the console buddy context be loaded in?
 ConsoleBuddy.ignore_startup_errors = false # Should warnings and errors be ignored?
 ConsoleBuddy.allowed_envs = ["development", "test"] # What RACK_ENV/RAILS_ENV do we want to use this in?
+ConsoleBuddy.one_off_job_service_type = :sidekiq # What background job gem do you use? :sidekiq, :resque, and :active_job are supported
 ```
 
 ## Development
