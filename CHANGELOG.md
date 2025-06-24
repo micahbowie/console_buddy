@@ -1,3 +1,7 @@
+## Console Buddy 0.1.5 (June 23, 2025) ##
+
+* Bug fixes
+
 ## Console Buddy 0.1.4 (December 27, 2024) ##
 
 * Bug fixes

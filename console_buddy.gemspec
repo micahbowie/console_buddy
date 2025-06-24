@@ -6,7 +6,7 @@ require "console_buddy/version"
 Gem::Specification.new do |spec|
   spec.name          = "console_buddy"
   spec.version       = ConsoleBuddy::VERSION
-  spec.authors       = ["Micah Bowie", "Code Cowboy"]
+  spec.authors       = ["Micah Bowie", "Good For Nothing"]
   spec.email         = ["micahbowie20@gmail.com"]
 
   spec.summary       = "Have you ever had debugging tricks, aliases, or shortcuts that don't make sense as application code but, are super helpful in the console? Define custom methods, helper, and aliases for your app and use them in your rails console or IRB session."
