@@ -1,3 +1,8 @@
+## Console Buddy 0.1.6 (June 23, 2025) ##
+
+* Enhanced File Loading
+- Console buddy now recursively loads files from subdirectories within the `.console_buddy/` directory, allowing for better organization of console helpers and definitions.
+
 ## Console Buddy 0.1.5 (June 23, 2025) ##
 
 * Bug fixes

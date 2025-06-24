@@ -48,7 +48,7 @@ $ bundle exec rails c
 ## Project Structure and Setup
 The home for all your console classes, helpers, and defintiions should be `.console_buddy/` directory.
 This can hold things like your own helper classes, scripts, and buddy definitions.
-Console buddy will attempt to load any `.rb` file in that directory.
+Console buddy will recursively load any `.rb` file in that directory and its subdirectories.
 
 ***This directory needs to be in the root of your project**
 
@@ -59,6 +59,11 @@ The recommeded naming convetion for the directory is as follows. Please note you
  |_ console_helpers.rb
  |_ config.rb
  |_ my_thing_class_that_i_only_use_in_console.rb
+ |_ helpers/
+    |_ user_helpers.rb
+    |_ admin_helpers.rb
+ |_ jobs/
+    |_ background_tasks.rb
  ....
 app/
  |_controllers/
@@ -130,7 +135,7 @@ Usage in the rails console is the exact same as you would run any other method
 
 ***InvalidTypeError***
 
-If you accidentally pass an invalid type to method or method_alias (something other than :instance or :class), you’ll see an InvalidTypeError. Make sure type is one of the two valid symbols.
+If you accidentally pass an invalid type to method or method_alias (something other than :instance or :class), you'll see an InvalidTypeError. Make sure type is one of the two valid symbols.
 
 ***Name Conflicts***
 
@@ -138,7 +143,7 @@ If you define a method that already exists on the class (or if you alias to an e
 
 ***Block Scope***
 
-Remember that when type: :instance, the block’s self is an instance of the class; when type: :class, self is the class itself.
+Remember that when type: :instance, the block's self is an instance of the class; when type: :class, self is the class itself.
 
 
 ## Add console helpers

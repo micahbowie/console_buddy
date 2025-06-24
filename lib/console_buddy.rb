@@ -130,9 +130,10 @@ module ConsoleBuddy
     def load_console_buddy_files
       console_buddy_path = Pathname.new(File.join(Dir.pwd, '.console_buddy'))
       if console_buddy_path.exist? && console_buddy_path.directory?
-        console_buddy_path.each_child do |file|
-          next unless file.file?
-          require file.to_s
+        console_buddy_path.find do |path|
+          next unless path.file?
+          next if path.basename.to_s == 'config.rb' # Skip config.rb as it's loaded separately
+          require path.to_s
         end
       else
         puts ".console_buddy folder not found in the root of the project."
