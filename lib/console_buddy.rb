@@ -14,6 +14,7 @@ require_relative "console_buddy/version"
 require_relative "console_buddy/one_off_job"
 require_relative "console_buddy/job"
 
+rspec_present = false
 # Only load the one-off job classes if the gems are installed
 # 
 begin
@@ -35,6 +36,14 @@ begin
   require_relative "console_buddy/jobs/active_job"
 rescue LoadError
   # puts "ActiveJob gem not installed, skipping active job integration."
+end
+
+begin
+  require 'rspec'
+  rspec_present = true
+rescue LoadError
+  rspec_present = false
+  # puts "RSpec gem not installed, skipping rspec integration."
 end
 
 module ConsoleBuddy
@@ -213,4 +222,7 @@ end
 
 require_relative "console_buddy/initializers/byebug"
 require_relative "console_buddy/initializers/rails"
-require_relative "console_buddy/initializers/rspec"
+
+if rspec_present
+  require_relative "console_buddy/initializers/rspec"
+end
