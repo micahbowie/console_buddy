@@ -1,3 +1,9 @@
+## Console Buddy 0.1.7 (June 23, 2025) ##
+
+* Conditionally Gem Loading
+- The gem will only load if there is a .console_buddy directory in the root of the project. (Same level as the Gemfile)
+
+
 ## Console Buddy 0.1.6 (June 23, 2025) ##
 
 * Enhanced File Loading

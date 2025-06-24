@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 require 'pathname'
+
+# Check if .console_buddy directory exists
+def console_buddy_directory_exists?
+  console_buddy_path = Pathname.new(File.join(Dir.pwd, '.console_buddy'))
+  console_buddy_path.exist? && console_buddy_path.directory?
+end
+
+if !console_buddy_directory_exists?
+  return
+end
+
 require 'active_support'
 require 'active_support/all'
 

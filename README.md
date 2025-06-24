@@ -18,6 +18,12 @@ Or install it yourself as:
 
     $ gem install console_buddy
 
+## Important: Conditional Loading
+
+**Console Buddy will only load if there is a `.console_buddy/` directory in the root of your project** (at the same level as your Gemfile). This is a safety feature that ensures the gem doesn't unnecessarily load in projects that don't use it.
+
+If the `.console_buddy/` directory doesn't exist, the gem will silently return without loading any of its functionality. This means you can safely include Console Buddy in your Gemfile without worrying about it affecting projects that don't have console buddy configurations.
+
 ## Basic Usage
 1. Create your `.console_buddy/` directory in the root of your project. (If you have a rails app the .console_buddy directory should be a sibling to app/)
 2. Add a config.rb file to the .`console_buddy/` directory. (More info on configuration below)
